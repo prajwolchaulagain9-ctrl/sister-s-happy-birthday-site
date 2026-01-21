@@ -12,10 +12,6 @@ dist
 dist-ssr
 *.local
 
-# Media files
-*.mp3
-*.jpg
-*.png
 
 # Editor directories and files
 .vscode/*
