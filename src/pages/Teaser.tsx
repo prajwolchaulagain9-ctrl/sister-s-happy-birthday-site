@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const wrongAnswers = [
   { text: "Monday?", response: "Nope! Think harder... 🤔" },
-  { text: "Taco Tuesday?", response: "I wish! But no... 🌮" },
+  { text: "Everyday is Momo day?", response: "YES! Every single day is momo day! 🥟✨" },
   { text: "Just another day?", response: "HOW DARE YOU! 😤" },
   { text: "Laundry day?", response: "Really?! That's your guess?! 🧺" },
 ];

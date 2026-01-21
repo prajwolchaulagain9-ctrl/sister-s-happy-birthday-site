@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { FloatingEmojis } from "@/components/FloatingEmoji";
+import { EasterEgg } from "@/components/EasterEgg";
 
 const Surprise = () => {
   const navigate = useNavigate();
@@ -106,7 +107,7 @@ const Surprise = () => {
               Happy Birthday!
             </h2>
             <p className="text-2xl md:text-3xl text-primary font-semibold">
-              To My Amazing Sister! 💖
+              To My Amazing Sister, Pamila! 💖 <EasterEgg emoji="😏" title="Wait... Pamila?" message="Oh you noticed! Yeah, we've been calling you Kamila this whole time! Got ya! 😂" />
             </p>
           </motion.div>
 

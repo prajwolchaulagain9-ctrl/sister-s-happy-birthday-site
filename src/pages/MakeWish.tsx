@@ -7,8 +7,8 @@ import confetti from "canvas-confetti";
 
 const funnyMessages = [
   "Another year older, another year weirder! 🤪",
-  "You're not old, you're vintage! 🍷",
-  "Age is just a number... a really BIG number! 😂",
+  "Wish everyone coud have such a good brother",
+  "Age is just a number... a really BIG number! but you still small 😂",
   "Still younger than tomorrow! 🎉",
   "Don't worry about getting older... worry about getting weirder! 🦄",
   "You're like fine cheese - you get better (and smellier) with age! 🧀",
@@ -87,10 +87,10 @@ const MakeWish = () => {
           className="text-center space-y-8"
         >
           <h2 className="text-3xl md:text-5xl font-party text-primary">
-            Make a Wish! 🌟
+            Kamila's Birthday Wishes! 🌟
           </h2>
           <p className="text-muted-foreground text-lg">
-            Click the cake to reveal birthday wishes! ({clickCount}/{funnyMessages.length})
+            Click the cake to reveal birthday wishes for Kamila! ({clickCount}/{funnyMessages.length})
           </p>
 
           {/* Clickable Cake */}

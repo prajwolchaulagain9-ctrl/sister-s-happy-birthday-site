@@ -102,6 +102,20 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+    min-height: 44px;
+  }
+
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
   }
 
   .font-party {

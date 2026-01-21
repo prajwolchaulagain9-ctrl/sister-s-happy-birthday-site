@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ProgressTracker } from "@/components/ProgressTracker";
+import { BackgroundMusicToggle } from "@/components/BackgroundMusicToggle";
 import Teaser from "./pages/Teaser";
 import Surprise from "./pages/Surprise";
 import PhotoGallery from "./pages/PhotoGallery";
@@ -19,6 +21,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ProgressTracker />
+        <BackgroundMusicToggle />
         <Routes>
           <Route path="/" element={<Teaser />} />
           <Route path="/surprise" element={<Surprise />} />

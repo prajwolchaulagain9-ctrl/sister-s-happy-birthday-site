@@ -1,53 +1,99 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { FloatingEmojis } from "@/components/FloatingEmoji";
+import { EasterEgg } from "@/components/EasterEgg";
 import { Button } from "@/components/ui/button";
 import { Heart, Gift, Star, Sparkles, PartyPopper, Crown, Cake, Music } from "lucide-react";
 import confetti from "canvas-confetti";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 // Age guessing game data
 const ageJokes = [
-  { age: "18", response: "Nice try! She's not THAT young! 😏" },
-  { age: "21", response: "Forever 21? Only in spirit! 😂" },
-  { age: "25", response: "Quarter life crisis incoming! 🎉" },
-  { age: "30", response: "Dirty thirty? More like FLIRTY thirty! 💃" },
-  { age: "???", response: "Age is classified information! 🤫" },
-  { age: "∞", response: "She's ageless like a fine wine! 🍷" },
+  { age: "18", response: "LOL! She's past that phase! Try again! 😏", isCorrect: false },
+  { age: "19", response: "YES! That's right! Sweet 19! 🎉", isCorrect: true },
+  { age: "21", response: "Forever 21? Only in spirit! 😂", isCorrect: false },
+  { age: "25", response: "Quarter life crisis? Not quite yet! 🎉", isCorrect: false },
+  { age: "30", response: "Whoa there! Slow down! 💃", isCorrect: false },
+  { age: "???", response: "Nice try! But we need a real number! 🤫", isCorrect: false },
+  { age: "∞", response: "She's not THAT ageless! 🍷", isCorrect: false },
 ];
 
 // Birthday wishes data
 const wishes = [
-  { icon: Heart, text: "May your heart be filled with endless joy and love!", color: "text-primary" },
+  { icon: Heart, text: "Jindagi ma afu thulo navaye ni kei thulo kaam garnu 🌟💪", color: "text-primary" },
   { icon: Gift, text: "Hope all your wildest wishes come true this year!", color: "text-secondary" },
-  { icon: Star, text: "You're a shining star in everyone's life!", color: "text-accent" },
-  { icon: Sparkles, text: "Sparkle on, birthday queen! 👑", color: "text-primary" },
+  { icon: Star, text: "Try to transform into a girl with the increase in age 👧➡️👩✨", color: "text-accent" },
+  { icon: Sparkles, text: "Jo jallai birse ni malai birsine hoina 😏💭", color: "text-primary" },
   { icon: PartyPopper, text: "May this year bring you endless celebrations!", color: "text-accent" },
-  { icon: Crown, text: "You deserve all the royal treatment today!", color: "text-secondary" },
+  { icon: Crown, text: "You deserve to give me a party for this work 🎉🍰😎", color: "text-secondary" },
   { icon: Cake, text: "Wishing you sweetness in every moment!", color: "text-primary" },
   { icon: Music, text: "May your life be filled with music and dance!", color: "text-accent" },
 ];
+
+// Funny catchphrases for reveal all popup
+const revealAllCatchphrases = [
+  "You wish you could have this many wishes come true! 😜",
+  "You wish you could find the remote control that easily! 📺",
+  "You wish you could remember where you parked your car! 🚗",
+  "You wish you could understand your sister that well! 👯",
+  "You wish you could pull off these decorations IRL! ✨",
+  "You wish you could have this much fun every day! 🎉",
+  "You wish you could age backwards like this site! 😂",
+  "You wish you could be this coordinated! 💃",
+  "You wish you could manifest things this easily! 🪄",
+  "You wish you could celebrate birthdays all year! 🎂",
+  "You wish you could make wishes come true with one click! 🖱️",
+  "You wish you could look this good on your birthday! 💅",
+];
+
+function getRandomCatchphrase(): string {
+  return revealAllCatchphrases[Math.floor(Math.random() * revealAllCatchphrases.length)];
+}
 
 const Wishes = () => {
   const [selectedAge, setSelectedAge] = useState<string | null>(null);
   const [showWishes, setShowWishes] = useState(false);
   const [revealedWishes, setRevealedWishes] = useState<number[]>([]);
+  const [showWrongAnswerPopup, setShowWrongAnswerPopup] = useState(false);
+  const [wrongAnswerText, setWrongAnswerText] = useState("");
+  const [showRevealAllPopup, setShowRevealAllPopup] = useState(false);
+  const [currentCatchphrase, setCurrentCatchphrase] = useState("");
+  const [showNoChancePopup, setShowNoChancePopup] = useState(false);
 
   const handleAgeClick = (age: string) => {
-    setSelectedAge(age);
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.6 },
-    });
-  };
-
-  const proceedToWishes = () => {
-    setShowWishes(true);
-    confetti({
-      particleCount: 100,
-      spread: 100,
-      origin: { y: 0.5 },
-    });
+    const selectedJoke = ageJokes.find((j) => j.age === age);
+    
+    if (selectedJoke?.isCorrect) {
+      // Correct answer
+      setSelectedAge(age);
+      confetti({
+        particleCount: 100,
+        spread: 100,
+        origin: { y: 0.5 },
+        colors: ["#ff69b4", "#ffd700", "#9b59b6", "#3498db", "#2ecc71"],
+      });
+      // Auto proceed to wishes after a short delay
+      setTimeout(() => {
+        setShowWishes(true);
+      }, 2000);
+    } else {
+      // Wrong answer - show popup
+      setWrongAnswerText(selectedJoke?.response || "Wrong answer! Try again! 😅");
+      setShowWrongAnswerPopup(true);
+      confetti({
+        particleCount: 20,
+        spread: 40,
+        origin: { y: 0.6 },
+        colors: ["#ff0000", "#ff4444"],
+      });
+    }
   };
 
   const revealWish = (index: number) => {
@@ -63,27 +109,15 @@ const Wishes = () => {
   };
 
   const revealAll = () => {
-    setRevealedWishes(wishes.map((_, i) => i));
-    const duration = 2000;
-    const end = Date.now() + duration;
-    const frame = () => {
-      confetti({
-        particleCount: 7,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ["#ff69b4", "#ffd700", "#9b59b6", "#3498db"],
-      });
-      confetti({
-        particleCount: 7,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ["#ff69b4", "#ffd700", "#9b59b6", "#3498db"],
-      });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    };
-    frame();
+    const catchphrase = getRandomCatchphrase();
+    setCurrentCatchphrase(catchphrase);
+    setShowRevealAllPopup(true);
+  };
+
+  const handleConfirmRevealAll = () => {
+    // Close the first popup and show the "No Chance" popup
+    setShowRevealAllPopup(false);
+    setShowNoChancePopup(true);
   };
 
   const handleFinalCelebration = () => {
@@ -141,28 +175,28 @@ const Wishes = () => {
               className="text-center space-y-8 max-w-2xl"
             >
               <h2 className="text-3xl md:text-5xl font-party text-primary">
-                How old is the birthday girl? 🤔
+                How old is Kamila? 🤔
               </h2>
 
-              {!selectedAge ? (
-                <motion.div className="flex flex-wrap justify-center gap-3">
-                  {ageJokes.map(({ age }, index) => (
-                    <motion.div
-                      key={age}
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.1 }}
+              <motion.div className="flex flex-wrap justify-center gap-3">
+                {ageJokes.map(({ age }, index) => (
+                  <motion.div
+                    key={age}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Button
+                      onClick={() => handleAgeClick(age)}
+                      className="text-lg px-6 py-6 rounded-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground shadow-lg"
                     >
-                      <Button
-                        onClick={() => handleAgeClick(age)}
-                        className="text-lg px-6 py-6 rounded-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground shadow-lg"
-                      >
-                        {age}
-                      </Button>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              ) : (
+                      {age}
+                    </Button>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {selectedAge && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5, rotateX: -90 }}
                   animate={{ opacity: 1, scale: 1, rotateX: 0 }}
@@ -178,31 +212,52 @@ const Wishes = () => {
                       🎂
                     </motion.div>
                     <p className="text-xl font-semibold text-foreground mb-2">
-                      You guessed: {selectedAge}
+                      Correct! She's {selectedAge}!
                     </p>
                     <p className="text-lg text-muted-foreground">
                       {ageJokes.find((j) => j.age === selectedAge)?.response}
                     </p>
-                  </div>
-
-                  <div className="space-y-4">
-                    <Button
-                      onClick={() => setSelectedAge(null)}
-                      variant="outline"
-                      className="border-primary text-primary hover:bg-primary hover:text-primary-foreground mr-4"
+                    <motion.p
+                      className="text-sm text-muted-foreground mt-4"
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
                     >
-                      🔄 Guess Again
-                    </Button>
-                    <Button
-                      onClick={proceedToWishes}
-                      size="lg"
-                      className="text-xl px-8 py-6 rounded-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground shadow-xl"
-                    >
-                      💝 See Heartfelt Wishes 💝
-                    </Button>
+                      Taking you to wishes...
+                    </motion.p>
                   </div>
                 </motion.div>
               )}
+
+              {/* Wrong Answer Popup */}
+              <AlertDialog open={showWrongAnswerPopup} onOpenChange={setShowWrongAnswerPopup}>
+                <AlertDialogContent className="max-w-md">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-2xl text-center">
+                      <motion.span
+                        animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
+                        transition={{ duration: 0.5 }}
+                        className="inline-block text-4xl mb-2"
+                      >
+                        🤭
+                      </motion.span>
+                      <br />
+                      Oops! Wrong Guess!
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-center text-lg pt-4">
+                      {wrongAnswerText}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="sm:justify-center">
+                    <Button
+                      onClick={() => setShowWrongAnswerPopup(false)}
+                      className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground"
+                    >
+                      Try Again! 🎯
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
             </motion.div>
           </motion.section>
         ) : (
@@ -221,10 +276,10 @@ const Wishes = () => {
                 className="text-center space-y-8 max-w-4xl w-full"
               >
                 <h2 className="text-3xl md:text-5xl font-party text-accent">
-                  Birthday Wishes Just for You! 💖
+                  Birthday Wishes for Kamila! 💖
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Tap each gift to reveal a special wish!
+                  Tap each gift to reveal a special wish! <EasterEgg emoji="🎁" title="Secret Found!" message="You found the secret gift! Here's an extra blessing: May all your coding bugs be easily fixable! 🐛✨" />
                 </p>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
@@ -282,6 +337,73 @@ const Wishes = () => {
                     🎊 Reveal All Wishes!
                   </Button>
                 )}
+
+                {/* Reveal All Popup */}
+                <AlertDialog open={showRevealAllPopup} onOpenChange={setShowRevealAllPopup}>
+                  <AlertDialogContent className="max-w-md">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-2xl text-center">
+                        <motion.span
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 0.5 }}
+                          className="inline-block text-5xl mb-2"
+                        >
+                          😜✨
+                        </motion.span>
+                        <br />
+                        Not So Fast!
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="text-center text-lg pt-4">
+                        {currentCatchphrase}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="sm:justify-center gap-3">
+                      <Button
+                        onClick={() => setShowRevealAllPopup(false)}
+                        variant="outline"
+                        className="border-primary text-primary hover:bg-primary/10"
+                      >
+                        Never Mind 😅
+                      </Button>
+                      <Button
+                        onClick={handleConfirmRevealAll}
+                        className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground"
+                      >
+                        Reveal Anyway! 💪
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+                {/* No Chance Popup */}
+                <AlertDialog open={showNoChancePopup} onOpenChange={setShowNoChancePopup}>
+                  <AlertDialogContent className="max-w-md">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-2xl text-center">
+                        <motion.span
+                          animate={{ rotate: [0, -15, 15, -15, 0] }}
+                          transition={{ duration: 0.6 }}
+                          className="inline-block text-6xl mb-2"
+                        >
+                          😱🙅
+                        </motion.span>
+                        <br />
+                        No Chance! 💋
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="text-center text-lg pt-4">
+                        Sorry sis, you gotta click through each one yourself! That's the fun part! 😜
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="sm:justify-center">
+                      <Button
+                        onClick={() => setShowNoChancePopup(false)}
+                        className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground"
+                      >
+                        Okay, okay! 😂
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </motion.div>
             </div>
 
@@ -302,7 +424,7 @@ const Wishes = () => {
                       A Special Message 💌
                     </h3>
                     <p className="text-lg md:text-xl text-foreground leading-relaxed">
-                      Dear Sis,
+                      Dear Kamila,
                       <br /><br />
                       On this special day, I want you to know just how amazing you are! 
                       You bring so much joy, laughter, and love into everyone's life. 
@@ -311,7 +433,9 @@ const Wishes = () => {
                       Here's to more adventures, more laughs, and more unforgettable memories together! 
                       <br /><br />
                       <span className="font-semibold text-primary">
-                        Happy Birthday! 🎂💖
+                        Happy Birthday, Kamila! 🎂💖
+                        <br /><br />
+                        Dherai khusi hune hoina ai le lekhdya ho text chai 😏😂
                       </span>
                     </p>
                   </motion.div>
@@ -320,7 +444,7 @@ const Wishes = () => {
                 {/* Final Celebration */}
                 <div className="text-center space-y-8">
                   <h2 className="text-3xl md:text-5xl font-party text-gradient-party">
-                    Have an Amazing Day! 🎂
+                    Have an Amazing Day! <EasterEgg emoji="🎂" title="Birthday Secret!" message="Psst... Your real age is still 19 in our hearts! Time doesn't apply to awesome people! 😎" /> 🎂
                   </h2>
 
                   <div className="flex justify-center gap-4 text-5xl">
@@ -353,7 +477,7 @@ const Wishes = () => {
                   </Button>
 
                   <p className="text-lg text-muted-foreground mt-8">
-                    Made with 💖 just for you, sis!
+                      Made with 💖 just for you, Kamila!
                   </p>
                 </div>
               </motion.div>
