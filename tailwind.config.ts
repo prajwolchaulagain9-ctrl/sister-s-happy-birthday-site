@@ -57,6 +57,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        party: {
+          pink: "hsl(var(--party-pink))",
+          yellow: "hsl(var(--party-yellow))",
+          purple: "hsl(var(--party-purple))",
+          blue: "hsl(var(--party-blue))",
+          green: "hsl(var(--party-green))",
+          orange: "hsl(var(--party-orange))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
