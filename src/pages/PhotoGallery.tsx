@@ -9,13 +9,19 @@ import {
   DialogContent,
 } from "@/components/ui/dialog";
 
+const ASSET_BASE = (import.meta.env.VITE_ASSET_BASE_URL || "").replace(/\/+$/, "");
+const assetUrl = (p: string) => {
+  const path = p.startsWith("/") ? p : `/${p}`;
+  return ASSET_BASE ? encodeURI(ASSET_BASE + path) : path;
+};
+
 const photoSlots = [
-  { id: 1, label: "Childhood Memory 👶", image: "/pamila4.png" },
-  { id: 2, label: "Family Fun 👨‍👩‍👧", image: "/pmaila2.jpg" },
-  { id: 3, label: "Best Friends 👯", image: "/pamila 1.jpg" },
-  { id: 4, label: "Travel Adventure ✈️", image: "/pamila6.jpg" },
-  { id: 5, label: "Silly Moment 🤪", image: "/pamila3.png" },
-  { id: 6, label: "Special Day 🎉", image: "/pamila5.png" },
+  { id: 1, label: "Childhood Memory 👶", image: assetUrl("/pamila4.png") },
+  { id: 2, label: "Family Fun 👨‍👩‍👧", image: assetUrl("/pmaila2.jpg") },
+  { id: 3, label: "Best Friends 👯", image: assetUrl("/pamila 1.jpg") },
+  { id: 4, label: "Travel Adventure ✈️", image: assetUrl("/pamila6.jpg") },
+  { id: 5, label: "Silly Moment 🤪", image: assetUrl("/pamila3.png") },
+  { id: 6, label: "Special Day 🎉", image: assetUrl("/pamila5.png") },
 ];
 
 const PhotoGallery = () => {

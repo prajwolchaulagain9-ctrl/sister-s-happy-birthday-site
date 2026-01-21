@@ -2,9 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, Music2 } from "lucide-react";
 import { motion } from "framer-motion";
 
+const ASSET_BASE = (import.meta.env.VITE_ASSET_BASE_URL || "").replace(/\/+$/, "");
+const assetUrl = (p: string) => {
+  const path = p.startsWith("/") ? p : `/${p}`;
+  return ASSET_BASE ? encodeURI(ASSET_BASE + path) : path;
+};
+
 const AUDIO_SOURCES = [
-  // Local file placed in public/
-  "/happy-birthday-background-music-390147.mp3",
+  // Primary: your local/public file, or CDN via VITE_ASSET_BASE_URL
+  assetUrl("/happy-birthday-background-music-390147.mp3"),
   // Remote fallback just in case
   "https://www.orangefreesounds.com/wp-content/uploads/2016/08/Happy-birthday-instrumental.mp3",
 ];
