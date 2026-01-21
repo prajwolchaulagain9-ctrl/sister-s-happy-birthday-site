@@ -5,7 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Teaser from "./pages/Teaser";
 import Surprise from "./pages/Surprise";
-import Party from "./pages/Party";
+import PhotoGallery from "./pages/PhotoGallery";
+import MakeWish from "./pages/MakeWish";
+import Balloons from "./pages/Balloons";
 import Wishes from "./pages/Wishes";
 import NotFound from "./pages/NotFound";
 
@@ -20,7 +22,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Teaser />} />
           <Route path="/surprise" element={<Surprise />} />
-          <Route path="/party" element={<Party />} />
+          <Route path="/gallery" element={<PhotoGallery />} />
+          <Route path="/make-wish" element={<MakeWish />} />
+          <Route path="/balloons" element={<Balloons />} />
           <Route path="/wishes" element={<Wishes />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

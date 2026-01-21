@@ -125,11 +125,11 @@ const Surprise = () => {
             transition={{ delay: 1.5 }}
           >
             <Button
-              onClick={() => navigate("/party")}
+              onClick={() => navigate("/gallery")}
               size="lg"
               className="text-xl px-10 py-7 rounded-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground shadow-xl"
             >
-              🎉 Let's Party! 🎉
+              🎉 See Your Memories! 🎉
             </Button>
           </motion.div>
         </motion.div>
